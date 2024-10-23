@@ -13,6 +13,9 @@
         <li class="nav-item">
           <a class="nav-link" href="product.jsp">Product</a>
         </li>  
+        <li class="nav-item">
+          <a class="nav-link" href="QuanTriSanPham">Manager</a>
+        </li>  
     </div>
   </div>
 </nav>
