@@ -30,21 +30,38 @@
         </tr>   
         <%
             DecimalFormat df = new DecimalFormat("#,##0");
-            ArrayList<Hoa> dsHoa = (ArrayList<Hoa>)request.getAttribute("dsHoa");
+            ArrayList<Hoa> dsHoa = (ArrayList<Hoa>) request.getAttribute("dsHoa");
             for (Hoa h : dsHoa) {
         %>
         <tr>
-            <td><%=h.getTenhoa() %></td>
+            <td><%=h.getTenhoa()%></td>
             <td><%=df.format(h.getGia())%></td>
-            <td> <img src="assets/images/products/<%=h.getHinh() %>" style="width: 100px"> </td>
+            <td> <img src="assets/images/products/<%=h.getHinh()%>" style="width: 100px"> </td>
             <td><%=h.getMaloai()%></td>
             <td>
-                <a href="QuanTriSanPham?action=edit&mahoa=<%=h.getMahoa() %>" class="btn btn-secondary"> <i class="bi bi-pencil-square"></i> Sửa</a>
-                <a href="QuanTriSanPham?action=delete&mahoa=<%=h.getMahoa() %>" class="btn btn-danger"> <i class="bi bi-trash"></i> Xoá</a>
+                <a href="QuanTriSanPham?action=EDIT&mahoa=<%=h.getMahoa()%>" class="btn btn-secondary"> <i class="bi bi-pencil-square"></i> Sửa</a>
+                <a href="QuanTriSanPham?action=DELETE&mahoa=<%=h.getMahoa()%>" class="btn btn-danger"> <i class="bi bi-trash"></i> Xoá</a>
             </td>
         </tr>
         <% } %>
     </table>
 </div>
+
+<%
+    if (request.getAttribute("success") != null) {
+%>
+<script>
+    alert("<%=request.getAttribute("success")%>");
+</script>
+<%
+} 
+%>
+
+<%
+    if (request.getAttribute("failed") != null) {
+%>
+<script>
+    alert("<%=request.getAttribute("failed")%>");
+</script> <% }%>
 
 <jsp:include page="../shared/footer.jsp" />

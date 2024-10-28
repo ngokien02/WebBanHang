@@ -4,6 +4,13 @@
     Author     : ADMIN
 --%>
 
+<%@page import="dao.HoaDAO"%>
+<%@page import="java.time.format.DateTimeFormatter"%>
+<%@page import="java.sql.Date"%>
+<%@page import="java.time.LocalDateTime"%>
+<%@page import="model.Hoa"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Connection"%>
 <%@page import="model.Loai"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -13,24 +20,23 @@
 <jsp:include page="../shared/nav.jsp" />
 
 <div class="container">
-
     <h2>Thêm sản phẩm (Hoa)</h2>    
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         <div class="mb-2">
             <label>Tên hoa</label>
-            <input type="text" name="tenhoa" value="" class="form-control" />
+            <input type="text" name="tenhoa" value="" required="" class="form-control" />
         </div>
         <div class="mb-2">
             <label>Giá</label>
-            <input type="number" name="gia" value="" class="form-control" />
+            <input type="number" name="gia" value="" required="" class="form-control" />
         </div>
         <div class="mb-2">
             <label>Hình ảnh</label>
-            <input type="file" name="hinh" value="" class="form-control" />
+            <input type="file" name="hinh" value="" required="" class="form-control" />
         </div>
         <div class="mb-2">
             <label>Thể loại</label>
-            <select name="maloai" class="form-control">      
+            <select name="maloai" class="form-control" required="">      
                 <option value="" disabled="">==Chọn thể loại==</option>
                 <%
                     ArrayList<Loai> dsLoai = (ArrayList<Loai>) request.getAttribute("dsLoai");
@@ -39,7 +45,7 @@
                 <option value="<%=l.getMaloai()%>"><%=l.getTenloai()%></option>
                 <% }%> 
             </select>
-        </div>        
+        </div>
         <button type="submit" class="btn btn-primary">Save</button>
     </form>       
 </div>

@@ -7,16 +7,22 @@ package controller;
 import dao.HoaDAO;
 import dao.LoaiDAO;
 import java.io.IOException;
+import java.nio.file.Paths;
+import java.sql.Date;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
+import model.Hoa;
 
 /**
  *
  * @author Admin
  */
+@MultipartConfig
 @WebServlet(name = "ProductManage", urlPatterns = {"/QuanTriSanPham"})
 public class ProductManage extends HttpServlet {
 
@@ -38,24 +44,51 @@ public class ProductManage extends HttpServlet {
         LoaiDAO loaiDao = new LoaiDAO();
         
         String action = "LIST";
-        if(request.getParameter("action")!=null){
+        if (request.getParameter("action") != null) {
             action = request.getParameter("action");
         }
         
-        switch(action){
+        switch (action) {
             case "LIST":
                 request.setAttribute("dsHoa", hoaDao.getAll());
                 request.getRequestDispatcher("admin/listProduct.jsp").forward(request, response);
                 break;
             case "ADD":
-                request.setAttribute("dsLoai", loaiDao.getAll());
-                request.getRequestDispatcher("admin/addProduct.jsp").forward(request, response);
+                String method = request.getMethod();
+                if (method.equalsIgnoreCase("get")) {
+                    request.setAttribute("dsLoai", loaiDao.getAll());
+                    request.getRequestDispatcher("admin/addProduct.jsp").forward(request, response);
+                } else if (method.equalsIgnoreCase("post")) {
+                    String tenHoa = request.getParameter("tenhoa");
+                    double gia = Double.parseDouble(request.getParameter("gia"));
+                    Part part = request.getPart("hinh");
+                    int maLoai = Integer.parseInt(request.getParameter("maloai"));
+                    
+                    String realPath = request.getServletContext().getRealPath("/assets/images/products");
+                    String fileName = Paths.get(part.getSubmittedFileName()).getFileName().toString();
+                    part.write(realPath + "/" + fileName);
+                    
+                    Hoa objInsert = new Hoa(0, tenHoa, gia, fileName, maLoai, new Date(new java.util.Date().getTime()));
+                    if (hoaDao.Insert(objInsert)) {
+                        request.setAttribute("success", "Thêm sản phẩm thành công");
+                    } else {
+                        request.setAttribute("failed", "Thêm sản phẩm thất bại!");
+                    }
+                    request.getRequestDispatcher("QuanTriSanPham?action=LIST").forward(request, response);
+                }
                 break;
             case "EDIT":
                 request.getRequestDispatcher("admin/editProduct.jsp").forward(request, response);
                 break;
             case "DELETE":
+                int maHoa = Integer.parseInt(request.getParameter("mahoa"));
                 
+                if (hoaDao.Delete(maHoa)) {
+                    request.setAttribute("success", "Xóa sản phẩm thành công!");
+                } else {
+                    request.setAttribute("failed", "Xóa sản phẩm thất bại!");
+                }
+                request.getRequestDispatcher("QuanTriSanPham?action=LIST").forward(request, response);
                 break;
         }
     }

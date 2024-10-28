@@ -6,6 +6,7 @@ package dao;
 
 import context.DbContext;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -86,7 +87,7 @@ public class HoaDAO {
 
     //phuong thuc them mới sản phẩm (Hoa)
     public boolean Insert(Hoa hoa) {
-        String sql = "insert into hoa (tenhoa,gia,hinh,maloai,ngaycapnhat) values (?,?,?,?,?)";
+        String sql = "insert into hoa (tenhoa, gia,hinh,maloai,ngaycapnhat) values (?,?,?,?,?)";
         conn = DbContext.getConnection();
         try {
             ps = conn.prepareStatement(sql);
@@ -164,7 +165,10 @@ public class HoaDAO {
 
     public static void main(String[] args) {
 //        System.out.println("Danh sach hoa top 10 gia: ");
-//        HoaDAO hoaDao = new HoaDAO();
+         HoaDAO hoaDao = new HoaDAO();
+         Hoa hoa = new Hoa(0, "test", 12,"", 1, new Date(new java.util.Date().getTime()));
+         hoaDao.Insert(hoa);
+                 
 //        ArrayList<Hoa> dsHoa = hoaDao.getTop10();
 //        for (Hoa hoa : dsHoa) {
 //            System.out.println(hoa);
