@@ -51,17 +51,29 @@
     if (request.getAttribute("success") != null) {
 %>
 <script>
-    alert("<%=request.getAttribute("success")%>");
+
+    Swal.fire({
+        title: "Good job!",
+        text: "<%=request.getAttribute("success")%>",
+        icon: "success"
+    });
+
 </script>
 <%
-} 
+    }
 %>
 
 <%
     if (request.getAttribute("failed") != null) {
 %>
 <script>
-    alert("<%=request.getAttribute("failed")%>");
+
+    Swal.fire({
+        title: "Good job!",
+        text: "<%=request.getAttribute("failed")%>",
+        icon: "error"
+    });
+
 </script> <% }%>
 
 <jsp:include page="../shared/footer.jsp" />

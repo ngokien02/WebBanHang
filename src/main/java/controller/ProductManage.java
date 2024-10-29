@@ -39,22 +39,21 @@ public class ProductManage extends HttpServlet {
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
-        
+
         HoaDAO hoaDao = new HoaDAO();
         LoaiDAO loaiDao = new LoaiDAO();
-        
+
         String action = "LIST";
         if (request.getParameter("action") != null) {
             action = request.getParameter("action");
         }
-        
+        String method = request.getMethod();
         switch (action) {
             case "LIST":
                 request.setAttribute("dsHoa", hoaDao.getAll());
                 request.getRequestDispatcher("admin/listProduct.jsp").forward(request, response);
                 break;
             case "ADD":
-                String method = request.getMethod();
                 if (method.equalsIgnoreCase("get")) {
                     request.setAttribute("dsLoai", loaiDao.getAll());
                     request.getRequestDispatcher("admin/addProduct.jsp").forward(request, response);
@@ -63,11 +62,11 @@ public class ProductManage extends HttpServlet {
                     double gia = Double.parseDouble(request.getParameter("gia"));
                     Part part = request.getPart("hinh");
                     int maLoai = Integer.parseInt(request.getParameter("maloai"));
-                    
+
                     String realPath = request.getServletContext().getRealPath("/assets/images/products");
                     String fileName = Paths.get(part.getSubmittedFileName()).getFileName().toString();
                     part.write(realPath + "/" + fileName);
-                    
+
                     Hoa objInsert = new Hoa(0, tenHoa, gia, fileName, maLoai, new Date(new java.util.Date().getTime()));
                     if (hoaDao.Insert(objInsert)) {
                         request.setAttribute("success", "Thêm sản phẩm thành công");
@@ -78,11 +77,42 @@ public class ProductManage extends HttpServlet {
                 }
                 break;
             case "EDIT":
+                if (method.equalsIgnoreCase("get")) {
+                    int maHoa = Integer.parseInt(request.getParameter("mahoa"));
+                    request.setAttribute("hoa", hoaDao.getById(maHoa));
+                    request.setAttribute("dsLoai", loaiDao.getAll());
+                    request.getRequestDispatcher("admin/editProduct.jsp").forward(request, response);
+                } 
+                else if (method.equalsIgnoreCase("post")) {
+                    int maHoa = Integer.parseInt(request.getParameter("mahoa"));
+                    String tenHoa = request.getParameter("tenhoa");
+                    double gia = Double.parseDouble(request.getParameter("gia"));
+                    Part part = request.getPart("hinh");
+                    int maLoai = Integer.parseInt(request.getParameter("maloai"));
+
+                    String fileName = request.getParameter("OldImg");
+
+                    if (part.getSize() > 0) {
+                        String realPath = request.getServletContext().getRealPath("/assets/images/products");
+                        fileName = Paths.get(part.getSubmittedFileName()).getFileName().toString();
+                        part.write(realPath + "/" + fileName);
+                    }
+
+                    Hoa objUpdate = new Hoa(maHoa, tenHoa, gia, fileName, maLoai, new Date(new java.util.Date().getTime()));
+
+                    if (hoaDao.Update(objUpdate)) {
+                        request.setAttribute("success", "Cập nhật sản phẩm thành công!");
+                    } 
+                    else {
+                        request.setAttribute("failed", "Cập nhật sản phẩm thất bại!");
+                    }
+                    request.getRequestDispatcher("QuanTriSanPham?action=LIST").forward(request, response);
+                }
                 request.getRequestDispatcher("admin/editProduct.jsp").forward(request, response);
                 break;
             case "DELETE":
                 int maHoa = Integer.parseInt(request.getParameter("mahoa"));
-                
+
                 if (hoaDao.Delete(maHoa)) {
                     request.setAttribute("success", "Xóa sản phẩm thành công!");
                 } else {
