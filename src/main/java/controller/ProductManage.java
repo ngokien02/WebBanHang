@@ -50,7 +50,18 @@ public class ProductManage extends HttpServlet {
         String method = request.getMethod();
         switch (action) {
             case "LIST":
-                request.setAttribute("dsHoa", hoaDao.getAll());
+                int pageSize = 5;
+                int pageIndex = 1;
+                if(request.getParameter("page")!=null){
+                    pageIndex = Integer.parseInt(request.getParameter("page"));
+                }
+                
+                int pageCount = (int) Math.ceil((double)hoaDao.getAll().size() / pageSize);
+                
+                request.setAttribute("dsHoa", hoaDao.getByPage(pageIndex, pageSize));
+                request.setAttribute("pageCount", pageCount);
+                request.setAttribute("pageIndex", pageIndex);
+                
                 request.getRequestDispatcher("admin/listProduct.jsp").forward(request, response);
                 break;
             case "ADD":

@@ -84,6 +84,8 @@ public class HoaDAO {
         }
         return ds;
     }
+    
+    
 
     //phuong thuc them mới sản phẩm (Hoa)
     public boolean Insert(Hoa hoa) {
@@ -162,12 +164,38 @@ public class HoaDAO {
         }
         return kq;
     }
+    
+    public ArrayList<Hoa> getByPage(int pageIndex, int pageSize) {
+        ArrayList<Hoa> ds = new ArrayList<>();
+        String sql = "select * from Hoa order by mahoa offset ? rows fetch next ? rows only";
+        conn = DbContext.getConnection();
+        try {
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, (pageIndex - 1)*pageSize);
+            ps.setInt(2, pageSize);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                ds.add(new Hoa(rs.getInt(1), 
+                        rs.getString(2), 
+                        rs.getDouble(3), 
+                        rs.getString(4), 
+                        rs.getInt(5), 
+                        rs.getDate(6)));
+            }
+        } catch (Exception ex) {
+            System.out.println("Loi:" + ex.toString());
+        }
+        return ds;
+    }
 
     public static void main(String[] args) {
-//        System.out.println("Danh sach hoa top 10 gia: ");
+        
          HoaDAO hoaDao = new HoaDAO();
-         Hoa hoa = new Hoa(0, "test", 12,"", 1, new Date(new java.util.Date().getTime()));
-         hoaDao.Insert(hoa);
+         
+//         ArrayList<Hoa> dsHoa = hoaDao.getByPage(1, 5);
+//         for(Hoa hoa : dsHoa){
+//             System.out.println(hoa);
+//         }
                  
 //        ArrayList<Hoa> dsHoa = hoaDao.getTop10();
 //        for (Hoa hoa : dsHoa) {

@@ -19,7 +19,18 @@
     <div class="mb-2 text-end">
         <a href="QuanTriSanPham?action=ADD" class="btn btn-success"> <i class="bi bi-plus-circle"></i> Thêm mới</a>
     </div>
+    <ul class="pagination justify-content-center">
+                <%
+                    int pageCount = (int)request.getAttribute("pageCount");
+                    int pageIndex = (int)request.getAttribute("pageIndex");
+                    for (int i = 1; i <= pageCount; i++) {
+                %>
+                <li class="page-item <%=pageIndex==i?"active":"" %>">
+                    <a class="page-link" href="QuanTriSanPham?page=<%=i%>"><%=i%></a>
+                </li>
 
+                <% } %>
+            </ul>
     <table class="table table-bordered table-striped">
         <tr>
             <th>Tên hoa</th>
@@ -45,11 +56,24 @@
         </tr>
         <% } %>
     </table>
-</div>
+    
+    <ul class="pagination justify-content-center">
+                <%
+                    for (int i = 1; i <= pageCount; i++) {
+                %>
+                <li class="page-item <%=pageIndex==i?"active":"" %>">
+                    <a class="page-link" href="QuanTriSanPham?page=<%=i%>"><%=i%></a>
+                </li>
 
+                <% } %>
+            </ul>
+    
+</div>
+    
 <%
     if (request.getAttribute("success") != null) {
 %>
+
 <script>
 
     Swal.fire({
