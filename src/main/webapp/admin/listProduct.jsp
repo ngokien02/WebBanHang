@@ -90,7 +90,7 @@
 <script>
 
     Swal.fire({
-        title: "Good job!",
+        title: "Oh no!",
         text: "<%=request.getAttribute("failed")%>",
         icon: "error"
     });
