@@ -32,6 +32,9 @@
                 } else {
                 %>
                 <li class="nav-item">
+                    <a class="nav-link" href="register.jsp"> Register </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="login.jsp"> Login </a>
                 </li>
                 <%

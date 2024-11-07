@@ -42,10 +42,17 @@ public class ProductManage extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         
         HttpSession session = request.getSession();
-        if(session.getAttribute("username")==null){
+        if (session.getAttribute("username") == null) {
+            request.setAttribute("error", "Bạn cần đăng nhập tài khoản admin để truy cập trang này!");
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }
-        
+        else if(session.getAttribute("username") != null && !session.getAttribute("username").equals("admin")){
+            request.setAttribute("error", "Bạn cần đăng nhập tài khoản admin để truy cập trang này!");
+            session.removeAttribute("username");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+//            session.invalidate();
+        }
+
         HoaDAO hoaDao = new HoaDAO();
         LoaiDAO loaiDao = new LoaiDAO();
 
@@ -58,16 +65,16 @@ public class ProductManage extends HttpServlet {
             case "LIST":
                 int pageSize = 5;
                 int pageIndex = 1;
-                if(request.getParameter("page")!=null){
+                if (request.getParameter("page") != null) {
                     pageIndex = Integer.parseInt(request.getParameter("page"));
                 }
-                
-                int pageCount = (int) Math.ceil((double)hoaDao.getAll().size() / pageSize);
-                
+
+                int pageCount = (int) Math.ceil((double) hoaDao.getAll().size() / pageSize);
+
                 request.setAttribute("dsHoa", hoaDao.getByPage(pageIndex, pageSize));
                 request.setAttribute("pageCount", pageCount);
                 request.setAttribute("pageIndex", pageIndex);
-                
+
                 request.getRequestDispatcher("admin/listProduct.jsp").forward(request, response);
                 break;
             case "ADD":
@@ -99,8 +106,7 @@ public class ProductManage extends HttpServlet {
                     request.setAttribute("hoa", hoaDao.getById(maHoa));
                     request.setAttribute("dsLoai", loaiDao.getAll());
                     request.getRequestDispatcher("admin/editProduct.jsp").forward(request, response);
-                } 
-                else if (method.equalsIgnoreCase("post")) {
+                } else if (method.equalsIgnoreCase("post")) {
                     int maHoa = Integer.parseInt(request.getParameter("mahoa"));
                     String tenHoa = request.getParameter("tenhoa");
                     double gia = Double.parseDouble(request.getParameter("gia"));
@@ -119,8 +125,7 @@ public class ProductManage extends HttpServlet {
 
                     if (hoaDao.Update(objUpdate)) {
                         request.setAttribute("success", "Cập nhật sản phẩm thành công!");
-                    } 
-                    else {
+                    } else {
                         request.setAttribute("failed", "Cập nhật sản phẩm thất bại!");
                     }
                     request.getRequestDispatcher("QuanTriSanPham?action=LIST").forward(request, response);

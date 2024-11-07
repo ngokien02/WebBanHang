@@ -8,16 +8,19 @@ import dao.AccountDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import model.Account;
 
 /**
  *
  * @author Admin
  */
-public class LoginServlet extends HttpServlet {
+@WebServlet(name = "RegisterServlet", urlPatterns = {"/RegisterServlet"})
+public class RegisterServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,23 +34,29 @@ public class LoginServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             String username = request.getParameter("username");
             String password = request.getParameter("password");
+            String passwordConfirm = request.getParameter("passwordConfirm");
             
             HttpSession session = request.getSession();
             AccountDAO acc = new AccountDAO();
+            Account newAcc = new Account(username, password);
             
-            if((acc.checkLogin(username, password))
-               || (username.equals("admin") && password.equals("admin"))){
-                request.setAttribute("success", "Đăng nhập thành công");
+            if(!password.equals(passwordConfirm)){
+                request.setAttribute("error", "Mật khẩu xác nhận chưa trùng khớp, vui lòng nhập lại!");
+                request.getRequestDispatcher("register.jsp").forward(request, response);
+            }
+            else if(acc.Regist(newAcc)){
+                request.setAttribute("success", "Đăng ký thành công");
                 session.setAttribute("username", username);
                 request.getRequestDispatcher("home.jsp").forward(request, response);
             }
             else{
-                request.setAttribute("error", "Đăng nhập thất bại. Tên hoặc mật khẩu không hợp lệ.");
-                request.getRequestDispatcher("login.jsp").forward(request, response);
+                request.setAttribute("error", "Đăng ký thất bại. Tên hoặc mật khẩu không phù hợp hoặc đã tồn tại.");
+                request.getRequestDispatcher("register.jsp").forward(request, response);
             }
         }
     }

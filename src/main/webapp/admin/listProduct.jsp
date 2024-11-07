@@ -19,11 +19,11 @@
     <div class="mb-2 text-end">
         <a href="QuanTriSanPham?action=ADD" class="btn btn-success"> <i class="bi bi-plus-circle"></i> Thêm mới</a>
     </div>
-    
-        <%
-            int pageCount = (int) request.getAttribute("pageCount");
-            int pageIndex = (int) request.getAttribute("pageIndex");
-        %>
+
+    <%
+        int pageCount = (int) request.getAttribute("pageCount");
+        int pageIndex = (int) request.getAttribute("pageIndex");
+    %>
 
     <table class="table table-bordered table-striped">
         <tr>
@@ -48,53 +48,24 @@
                 <a href="QuanTriSanPham?action=DELETE&mahoa=<%=h.getMahoa()%>" class="btn btn-danger"> <i class="bi bi-trash"></i> Xoá</a>
             </td>
         </tr>
-        <% } %>
+        <% }%>
     </table>
 
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
-            <li class="page-item <%=pageIndex==1?"disabled":""%>"><a class="page-link" href="QuanTriSanPham?page=1">First</a></li>
-            <li class="page-item <%=pageIndex==1?"disabled":""%>"><a class="page-link" href="QuanTriSanPham?page=<%=(pageIndex > 1)?(pageIndex-1) : 1 %>">Previous</a></li>
+            <li class="page-item <%=pageIndex == 1 ? "disabled" : ""%>"><a class="page-link" href="QuanTriSanPham?page=1">First</a></li>
+            <li class="page-item <%=pageIndex == 1 ? "disabled" : ""%>"><a class="page-link" href="QuanTriSanPham?page=<%=(pageIndex > 1) ? (pageIndex - 1) : 1%>">Previous</a></li>
                 <%
                     for (int i = 1; i <= pageCount; i++) {
                 %>
-        <li class="page-item <%=(i == pageIndex)?"active":"" %>"><a class="page-link" href="QuanTriSanPham?page=<%=i %>"><%=i%></a></li>
-        <% } %>
-        <li class="page-item <%=pageIndex==pageCount?"disabled":""%>"><a class="page-link" href="QuanTriSanPham?page=<%=(pageIndex<pageCount)?(pageIndex+1): pageIndex %>">Next</a></li>
-        <li class="page-item <%=pageIndex==pageCount?"disabled":""%>"><a class="page-link" href="QuanTriSanPham?page=<%=pageCount %>">Last</a></li>
+            <li class="page-item <%=(i == pageIndex) ? "active" : ""%>"><a class="page-link" href="QuanTriSanPham?page=<%=i%>"><%=i%></a></li>
+                <% }%>
+            <li class="page-item <%=pageIndex == pageCount ? "disabled" : ""%>"><a class="page-link" href="QuanTriSanPham?page=<%=(pageIndex < pageCount) ? (pageIndex + 1) : pageIndex%>">Next</a></li>
+            <li class="page-item <%=pageIndex == pageCount ? "disabled" : ""%>"><a class="page-link" href="QuanTriSanPham?page=<%=pageCount%>">Last</a></li>
         </ul>
     </nav>
-        
+
 </div>
 
-<%
-    if (request.getAttribute("success") != null) {
-%>
-
-<script>
-
-    Swal.fire({
-        title: "Good job!",
-        text: "<%=request.getAttribute("success")%>",
-        icon: "success"
-    });
-
-</script>
-<%
-    }
-%>
-
-<%
-    if (request.getAttribute("failed") != null) {
-%>
-<script>
-
-    Swal.fire({
-        title: "Oh no!",
-        text: "<%=request.getAttribute("failed")%>",
-        icon: "error"
-    });
-
-</script> <% }%>
-
+<jsp:include page="../Alert.jsp" />        
 <jsp:include page="../shared/footer.jsp" />

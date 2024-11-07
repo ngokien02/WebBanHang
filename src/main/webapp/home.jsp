@@ -59,4 +59,5 @@
 
 </div><!-- /.container -->
 <!--nhung noi dung footer.jsp-->
+<jsp:include page="./Alert.jsp" />
 <jsp:include page="shared/footer.jsp" />   
