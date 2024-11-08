@@ -47,9 +47,8 @@ public class ProductManage extends HttpServlet {
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }
         else if(session.getAttribute("username") != null && !session.getAttribute("username").equals("admin")){
-            request.setAttribute("error", "Bạn cần đăng nhập tài khoản admin để truy cập trang này!");
-            session.removeAttribute("username");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+            request.setAttribute("failed", "Bạn cần đăng nhập tài khoản admin để truy cập trang này!");
+            request.getRequestDispatcher("home.jsp").forward(request, response);
 //            session.invalidate();
         }
 
