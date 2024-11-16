@@ -35,7 +35,6 @@ public class RegisterServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-        try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             String username = request.getParameter("username");
             String password = request.getParameter("password");
@@ -58,7 +57,7 @@ public class RegisterServlet extends HttpServlet {
                 request.setAttribute("error", "Đăng ký thất bại. Tên hoặc mật khẩu không phù hợp hoặc đã tồn tại.");
                 request.getRequestDispatcher("register.jsp").forward(request, response);
             }
-        }
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

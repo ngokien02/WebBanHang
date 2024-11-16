@@ -6,18 +6,18 @@ package controller;
 
 import dao.AccountDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import model.Account;
 
 /**
  *
  * @author Admin
  */
-public class LoginServlet extends HttpServlet {
+public class ChangePassServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,26 +31,35 @@ public class LoginServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
-            /* TODO output your page here. You may use following sample code. */
-            String username = request.getParameter("username");
-            String password = request.getParameter("password");
-            
-            HttpSession session = request.getSession();
-            AccountDAO acc = new AccountDAO();
-            
-            if((acc.checkLogin(username, password))
-               || (username.equals("admin") && password.equals("admin"))){
-                request.setAttribute("success", "Đăng nhập thành công");
-                session.setAttribute("username", username);
-                session.setAttribute("password", password);
+
+        HttpSession session = request.getSession();
+        AccountDAO adao = new AccountDAO();
+
+        String username = session.getAttribute("username").toString();
+        String oldPass = request.getParameter("oldPass");
+        String newPass = request.getParameter("newPass");
+        String confirm = request.getParameter("newPassConfirm");
+
+        Account acc = new Account(username, oldPass);
+
+        if (adao.checkLogin(username, oldPass)) {
+            if (!newPass.trim().equals(confirm)) {
+                request.setAttribute("error", "Đổi mật khẩu thất bại, mật khẩu xác nhận không trùng khớp!");
+                request.getRequestDispatcher("ChangePass.jsp").forward(request, response);
+            }
+            else if (newPass.trim().equals("") || confirm.trim().equals("")) {
+                request.setAttribute("error", "Đổi mật khẩu thất bại, mật khẩu không được để trống!");
+                request.getRequestDispatcher("ChangePass.jsp").forward(request, response);
+            }
+            else {
+                adao.ChangePass(acc, newPass);
+                request.setAttribute("success", "Đổi mật khẩu thành công!");
                 request.getRequestDispatcher("home.jsp").forward(request, response);
             }
-            else{
-                request.setAttribute("error", "Đăng nhập thất bại. Tên hoặc mật khẩu không hợp lệ.");
-                request.getRequestDispatcher("login.jsp").forward(request, response);
-            }
-        
+        } else {
+            request.setAttribute("error", "Đổi mật khẩu thất bại, mật khẩu cũ không hợp lệ!");
+            request.getRequestDispatcher("ChangePass.jsp").forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

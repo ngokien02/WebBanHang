@@ -34,7 +34,7 @@
             <th>Action</th>
         </tr>   
         <%
-            DecimalFormat df = new DecimalFormat("#,##0");
+            DecimalFormat df = new DecimalFormat("#,##0 vnđ");
             ArrayList<Hoa> dsHoa = (ArrayList<Hoa>) request.getAttribute("dsHoa");
             for (Hoa h : dsHoa) {
         %>
@@ -53,15 +53,25 @@
 
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
-            <li class="page-item <%=pageIndex == 1 ? "disabled" : ""%>"><a class="page-link" href="QuanTriSanPham?page=1">First</a></li>
-            <li class="page-item <%=pageIndex == 1 ? "disabled" : ""%>"><a class="page-link" href="QuanTriSanPham?page=<%=(pageIndex > 1) ? (pageIndex - 1) : 1%>">Previous</a></li>
-                <%
-                    for (int i = 1; i <= pageCount; i++) {
-                %>
-            <li class="page-item <%=(i == pageIndex) ? "active" : ""%>"><a class="page-link" href="QuanTriSanPham?page=<%=i%>"><%=i%></a></li>
-                <% }%>
-            <li class="page-item <%=pageIndex == pageCount ? "disabled" : ""%>"><a class="page-link" href="QuanTriSanPham?page=<%=(pageIndex < pageCount) ? (pageIndex + 1) : pageIndex%>">Next</a></li>
-            <li class="page-item <%=pageIndex == pageCount ? "disabled" : ""%>"><a class="page-link" href="QuanTriSanPham?page=<%=pageCount%>">Last</a></li>
+            <li class="page-item <%=pageIndex == 1 ? "disabled" : ""%>">
+                <a class="page-link" href="QuanTriSanPham?page=1">First</a>
+            </li>
+            <li class="page-item <%=pageIndex == 1 ? "disabled" : ""%>">
+                <a class="page-link" href="QuanTriSanPham?page=<%=(pageIndex > 1) ? (pageIndex - 1) : 1%>">Previous</a>
+            </li>
+            <%
+                for (int i = 1; i <= pageCount; i++) {
+            %>
+            <li class="page-item <%=(i == pageIndex) ? "active" : ""%>">
+                <a class="page-link" href="QuanTriSanPham?page=<%=i%>"><%=i%></a>
+            </li>
+            <% }%>
+            <li class="page-item <%=pageIndex == pageCount ? "disabled" : ""%>">
+                <a class="page-link" href="QuanTriSanPham?page=<%=(pageIndex < pageCount) ? (pageIndex + 1) : pageIndex%>">Next</a>
+            </li>
+            <li class="page-item <%=pageIndex == pageCount ? "disabled" : ""%>">
+                <a class="page-link" href="QuanTriSanPham?page=<%=pageCount%>">Last</a>
+            </li>
         </ul>
     </nav>
 

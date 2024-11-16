@@ -157,7 +157,12 @@ public class HoaDAO {
             ps.setInt(1, mahoa);
             rs = ps.executeQuery();
             if (rs.next()) {
-                kq = new Hoa(rs.getInt(1), rs.getString(2), rs.getDouble(3), rs.getString(4), rs.getInt(5), rs.getDate(6));
+                kq = new Hoa(rs.getInt(1), 
+                            rs.getString(2), 
+                            rs.getDouble(3), 
+                            rs.getString(4), 
+                            rs.getInt(5), 
+                            rs.getDate(6));
             }
         } catch (Exception ex) {
             System.out.println("Loi:" + ex.toString());
@@ -167,7 +172,7 @@ public class HoaDAO {
     
     public ArrayList<Hoa> getByPage(int pageIndex, int pageSize) {
         ArrayList<Hoa> ds = new ArrayList<>();
-        String sql = "select * from Hoa order by mahoa offset ? rows fetch next ? rows only";
+        String sql = "select * from Hoa order by gia offset ? rows fetch next ? rows only";
         conn = DbContext.getConnection();
         try {
             ps = conn.prepareStatement(sql);

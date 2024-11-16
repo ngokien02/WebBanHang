@@ -33,7 +33,7 @@
         <div class="mb-2">
             <label>Hình ảnh</label>
             <input type="file" name="hinh" value="" class="form-control" />
-            <img src="../assets/images/products/<%=hoa.getHinh() %>" width="150px">
+            <img src="assets/images/products/<%=hoa.getHinh() %>" width="150px">
             <input type="hidden" name="OldImg" value="<%=hoa.getHinh() %>" />
         </div>
          <div class="mb-2">

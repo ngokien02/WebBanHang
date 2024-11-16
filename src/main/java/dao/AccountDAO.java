@@ -70,31 +70,28 @@ public class AccountDAO {
         }
         return false;
     }
+    
+    public boolean ChangePass(Account acc, String newPass) {
+        String sql = "update account set password=? where username=?";
+        conn = DbContext.getConnection();
+        try {
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, newPass);
+            ps.setString(2, acc.getUserName());
+            int kq = ps.executeUpdate();
+            if (kq > 0) {
+                return true;
+            }
+        } catch (Exception ex) {
+            System.out.println("Loi:" + ex.toString());
+        }
+        return false;
+    }
 
     public static void main(String[] args) {
-
-        AccountDAO ac = new AccountDAO();
-//        ArrayList<Account> ds = ac.getAll();
-//
-//        System.out.println("Danh sach tai khoan hien co");
-//        for (Account acc : ds) {
-//            System.out.println(acc);
-//        }
-//
-//        Account newAcc = new Account("kienvip1", "kienvip1");
-//        System.out.println(ac.Regist(newAcc));
-//        ac.getAll();
-//        System.out.println("Insert new account");
-//        ac.Regist(newAcc);
-//        for (Account acc : ds) {
-//            System.out.println(acc);
-//        }
-        System.out.println(
-        ac.checkLogin("kienvip1", "kienvip1")
-        );
-        
-        
-        
+        AccountDAO adao = new AccountDAO();
+        Account acc = new Account("kienvip1", "kienvip1");
+        System.out.println(adao.ChangePass(acc, "kienpro"));
     }
 
 }

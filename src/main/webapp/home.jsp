@@ -27,7 +27,7 @@
                 <%
                     DecimalFormat df = new DecimalFormat("#,##0");
                     HoaDAO hoaDAO = new HoaDAO();
-                    ArrayList<Hoa> dsHoa = hoaDAO.getTop10();
+                    ArrayList<Hoa> dsHoa = hoaDAO.getAll();
                     for(Hoa h : dsHoa){
                     %>
                 <div class="col-12 col-md-6 col-lg-4">
